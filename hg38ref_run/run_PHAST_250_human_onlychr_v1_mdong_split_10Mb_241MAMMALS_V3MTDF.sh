@@ -7,7 +7,7 @@
 #SBATCH -p core
 #SBATCH -n 2
 #SBATCH -t 12:00:00
-#SBATCH --array=1-2
+#SBATCH --array=1-322%50
 
 # This script is a batch script ready to be submitted to SLURM.
 # Runs both PhastCons and PhyloP on the Broad 250-way human-referenced MAF alignment file, primarily splitted into 10 Mb length chunks
