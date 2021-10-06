@@ -33,7 +33,7 @@ module load python/2.7.15
 module load BEDOPS
 
 # Get name of file nb $SLURM_ARRAY_TASK_ID
-list_file="/proj/uppstore2017228/KLT.04.200M/200m_MD/scripts/250_MAMMALS_scripts/LISTS/MAF/human_onlychr_v1_mdong_10Mb_241MAMMALS_V2_MTDF.txt"
+list_file="human_onlychr_v1_mdong_10Mb_241MAMMALS_V2_MTDF.txt" # list of maf.gz files to process
 FILE=$(head -$SLURM_ARRAY_TASK_ID $list_file | tail -1)
 
 # Get only the base name (names of the files are in this format: <chromosome>.<start>.<length>.maf.<format: gz or zst>)
@@ -43,7 +43,7 @@ fname2=${fname%.*}
 mafFILE=${FILE%.*}
 
 # uncompress target file, keep original. Adapt if the file is compressed in another format than gz
-/proj/uppstore2017228/KLT.04.200M/200m_MD/resources/zstd/zstd-dev/zstd -d -k $FILE
+# need to install zstd if you use zstd-compressed files
 if [[ "$fnamebase" =~ ^*.gz$ ]]; then
         gzip -d -c $FILE > $mafFILE
 elif [[ "$fnamebase" =~ ^*.zst$ ]]; then
@@ -55,17 +55,17 @@ chromosome="$(cut -d'.' -f1 <<< $fnamebase)"
 chromosome_nb=$(echo $chromosome | sed -r 's/chr//g')
 
 # Model file pathway
-model_conserved="/proj/uppstore2017228/KLT.04.200M/200m_MD/data/new_250_MAMMALS_v2_20201120/MOD/V3_100kb/Anc239_allARs_100kb_lessGC40_241species_30Consensus.mod"
+model_conserved="general.mod"
 if [[ "$chromosome_nb" =~ ^X.* ]]; then
-	model_conserved="/proj/uppstore2017228/KLT.04.200M/200m_MD/data/new_250_MAMMALS_v2_20201120/MOD/V3_100kb/human_100kb_chrX_lessGC40_241species_30Consensus.mod"
+	model_conserved="chrX.mod"
 elif [[ "$chromosome_nb" =~ ^Y.* ]]; then
-	model_conserved="/proj/uppstore2017228/KLT.04.200M/200m_MD/data/new_250_MAMMALS_v2_20201120/MOD/V3_100kb/human_100kb_chrY_lessGC40_241species_30Consensus.mod"
+	model_conserved="chrY.mod"
 fi
 
 ##### PhyloP
 
 # Output directory. If it does not exist, creates it.
-output_dir="/proj/uppstore2017228/KLT.04.200M/200m_MD/data/new_250_MAMMALS_v2_20201120/OUT/PHAST/human_onlychr_v3_mdong_10Mb_241MAMMALS_MTDF/PHYLOP"
+output_dir="human_PHYLOP"
 if [ ! -d "$output_dir" ]; then
  	mkdir "$output_dir"
 fi
@@ -84,7 +84,7 @@ wig2bed < $output_dir/$output_name >> $output_dir/$output_name".bed"
 ##### PhastCons
 
 # Output directory. If it does not exist, creates it.
-output_dir="/proj/uppstore2017228/KLT.04.200M/200m_MD/data/new_250_MAMMALS_v2_20201120/OUT/PHAST/human_onlychr_v3_mdong_10Mb_241MAMMALS_MTDF/PHASTCONS"
+output_dir="human_PHASTCONS"
 if [ ! -d "$output_dir" ]; then
 	mkdir "$output_dir"
 fi
