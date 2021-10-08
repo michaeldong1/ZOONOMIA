@@ -1,0 +1,19 @@
+list_mafFiles_txt=""
+nb_files=$(ls $list_mafFiles_txt |wc -l)
+
+model_autosomes=""
+chrX_prefix="chrX" 	# leave blank if none
+model_chrX="" 		# leave blank if none
+chrY_prefix="chrY" 	# leave blank if none
+model_chrY="" 		# leave blank if none 
+
+
+# PhastCons parameters
+target_coverage=0.3
+expected_length=45
+rho=0.3
+
+# PhyloP parameters
+input_type="MAF"
+method="LRT"
+mode="CONACC"
