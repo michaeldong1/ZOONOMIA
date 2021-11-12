@@ -1,26 +1,20 @@
 #!/bin/bash
 
 #SBATCH -A <name_project>
-#SBATCH -e out/pH241MTDF_%j_%a.err
-#SBATCH -J P_H241MTDF
-#SBATCH -o out/pH241MTDF_%j_%a.out
+#SBATCH -e error_out/phast/phast_%j_%a.err
+#SBATCH -o error_out/phast/phast_%j_%a.out
+#SBATCH -J PHAST_%j_%a
 #SBATCH -p core
-#SBATCH -n 2
+#SBATCH -n 1
 #SBATCH -t 12:00:00
-#SBATCH --array=1-322%50
 
-# This script is a batch script ready to be submitted to SLURM.
+### Description of the pipeline
 # Runs both PhastCons and PhyloP on the Broad 250-way human-referenced MAF alignment file, primarily splitted into 10 Mb length chunks
-# It runs a series of jobs in the indicated directory.
-# It is currently set to run the standard PhastCons command (with same parameters from UCSC PhastCons 100-way alignment)
+# It is currently set to run the default PhastCons and PhyloP command (with same parameters from UCSC PhastCons and PhyloP 100-way alignment)
 # If needed don't hesitate to custom the parameters.
-# Before running, don't forget to:
-# - check/change the SBATCH project
-# - check/change the SBATCH output and error message pathways
-# - check/change the number of cores needed for each job (no need for too high if the alignment files were primarily splitted using maf_parse)
-# - check/change the array range to match the number of files.
-# - check/change the indicated input ($FILES), output directory, output name and options below. 
-# Be conscious that this array job is quite heavy, depending on how many and how big your files are.
+# This script is a batch script ready to be submitted to SLURM.
+# !!! Run the submit script instead. Readme in "submit_Phast_241MAMMALS_V3.sh" .
+
 
 # Print time of start in the programm standard output (the .out file)
 echo -n "Time started: "
@@ -33,7 +27,7 @@ module load python/2.7.15
 module load BEDOPS
 
 # Get name of file nb $SLURM_ARRAY_TASK_ID
-list_file="human_onlychr_v1_mdong_10Mb_241MAMMALS_V2_MTDF.txt" # list of maf.gz files to process
+list_file=$1 # list of maf files to process
 FILE=$(head -$SLURM_ARRAY_TASK_ID $list_file | tail -1)
 
 # Get only the base name (names of the files are in this format: <chromosome>.<start>.<length>.maf.<format: gz or zst>)
@@ -44,10 +38,17 @@ mafFILE=${FILE%.*}
 
 # uncompress target file, keep original. Adapt if the file is compressed in another format than gz
 # need to install zstd if you use zstd-compressed files
+dontdelete=0
 if [[ "$fnamebase" =~ ^*.gz$ ]]; then
         gzip -d -c $FILE > $mafFILE
 elif [[ "$fnamebase" =~ ^*.zst$ ]]; then
         zstd -d -k $FILE
+elif [[ "$fnamebase" =~ ^*.maf$ ]]; then
+		fnamebase=${FILE##*/}
+		fname=${fnamebase}
+		fname2=${fname%.*}
+		mafFILE=$FILE
+		dontdelete=1 # important
 fi
 
 # Get the chromosome number from the file name
@@ -55,20 +56,20 @@ chromosome="$(cut -d'.' -f1 <<< $fnamebase)"
 chromosome_nb=$(echo $chromosome | sed -r 's/chr//g')
 
 # Model file pathway
-model_conserved="general.mod"
-if [[ "$chromosome_nb" =~ ^X.* ]]; then
-	model_conserved="chrX.mod"
-elif [[ "$chromosome_nb" =~ ^Y.* ]]; then
-	model_conserved="chrY.mod"
+model_conserved=$4
+
+if [[ "$chromosome_nb" =~ ^X.* && $5 == 1 ]]; then
+	model_conserved=$7
+fi
+
+if [[ "$chromosome_nb" =~ ^Y.* && $6 == 1 ]]; then
+	model_conserved=$8
 fi
 
 ##### PhyloP
 
 # Output directory. If it does not exist, creates it.
-output_dir="human_PHYLOP"
-if [ ! -d "$output_dir" ]; then
- 	mkdir "$output_dir"
-fi
+output_dir=$3
 
 # Output name format for list of conservation scores on each position
 output_name=$fname2"_scoresPhyloP_250.wig"
@@ -78,16 +79,14 @@ options="-i MAF --method LRT --mode CONACC --wig-scores --chrom $chromosome"
 
 # Run PhyloP
 phyloP $options $model_conserved $mafFILE > $output_dir/$output_name
+
 # Generate a BED version	
 wig2bed < $output_dir/$output_name >> $output_dir/$output_name".bed"
 
 ##### PhastCons
 
 # Output directory. If it does not exist, creates it.
-output_dir="human_PHASTCONS"
-if [ ! -d "$output_dir" ]; then
-	mkdir "$output_dir"
-fi
+output_dir=$2
 
 # Output name format for list of conservation scores on each position
 output_name=$fname2"_scoresPhastCons_250.wig"
@@ -106,7 +105,9 @@ wig2bed < $output_dir/$output_name >> $output_dir/$output_name"_scores.bed"
 ##### END
 
 # Delete uncompressed file
+if [ $dontdelete == 0 ]; then
 rm $mafFILE
+fi
 
 echo -n "Time ended: "
 date

@@ -13,16 +13,7 @@
 # Following recoomentations, we calculated repeats on the 2nd most ancestral sequence before reconverting coordinates to most ancestral consensus.
 # Designed to run on the Uppmax	SLURM system. Can be simply ed
 # Script customized to run everything in one run.
-# if not avaliable as module on your system, the following packages/ apps are required to be installed :
-# You will need to change the command lines in accordance.
-
-# Required: 
-# - Repeatmasker : https://www.repeatmasker.org/RepeatMasker/
-# - hal : https://github.com/ComparativeGenomicsToolkit/hal
-# - BEDOPS v2.4.38 : https://bedops.readthedocs.io/en/latest
-# - BEDTools v2.29.2 : https://bedtools.readthedocs.io/en/latest
-# - Phast v1.5 : https://github.com/CshlSiepelLab/phast
-# - mafTools from Dent Earl : https://github.com/dentearl/mafTools
+# !!! Run the submit script instead. README in run_modelGeneration_mammals.sh
 
 echo -n "Time started: "
 date
@@ -76,7 +67,7 @@ options_hal2maf="--refGenome fullTreeAnc239 --onlyOrthologs --targetGenomes $gen
 
 # If have to run for chr X and Y: Parameters for X and Y
 sexChr_yes=1 # leave on 1 if you have specific sex chr ot calculate 
-ancestral_repeat_final_synt_LOXY=$output_dir"/rmsk."$species_final".Allfam.LO_"$species_reference".bed"
+ancestral_repeat_final_synt_LO=$output_dir"/rmsk."$species_final".Allfam.LO_"$species_reference".bed"
 ancestral_repeat_final_AR100kb_hg38X=$output_dir"/rmsk."$species_final".Allfam.LO_"$species_reference"_chrX.100kb.bed" # random 100kb selected on X
 maf_100kb_X=$output_dir"/rmsk."$species_final".Allfam.LO_"$species_reference"_chrX.100kb.maf" # maf of random 100kb positions on X
 maf_100kbmod_X=$output_dir"/rmsk."$species_final".Allfam.LO_"$species_reference"_chrX.100kb.mod" # model output for chrX
@@ -126,11 +117,11 @@ phyloFit $maf_100kb -i MAF --subst-mod REV --EM --tree $tree --out-root $maf_100
 ### Chr X and Y models
 # For models on chrX and Y, conversion of coordinates to a species with identified chrX and Y 
 # In that case, we picked human.
-halLiftOver $hal_file $species_rmsk $ancestral_repeat_final_synt $species_reference $ancestral_repeat_final_synt_LOXY --outPSL --noDupes
+halLiftOver $hal_file $species_rmsk $ancestral_repeat_final_synt $species_reference $ancestral_repeat_final_synt_LO --outPSL --noDupes
 
 # Select random 100kb on chrX and chrY
-awk -v OFS='\t' '{if ($1=="chrX") print}' $ancestral_repeat_final_synt_LOXY | bedops --chop 1 - | shuf -n 100000 | sort -k1,1 -k2,2n | bedtools merge -i - > $ancestral_repeat_final_AR100kb_hg38X
-awk -v OFS='\t' '{if ($1=="chrY") print}' $ancestral_repeat_final_synt_LOXY | bedops --chop 1 - | shuf -n 100000 | sort -k1,1 -k2,2n | bedtools merge -i - > $ancestral_repeat_final_AR100kb_hg38Y
+awk -v OFS='\t' '{if ($1=="chrX") print}' $ancestral_repeat_final_synt | bedops --chop 1 - | shuf -n 100000 | sort -k1,1 -k2,2n | bedtools merge -i - > $ancestral_repeat_final_AR100kb_hg38X
+awk -v OFS='\t' '{if ($1=="chrY") print}' $ancestral_repeat_final_synt | bedops --chop 1 - | shuf -n 100000 | sort -k1,1 -k2,2n | bedtools merge -i - > $ancestral_repeat_final_AR100kb_hg38Y
 
 # Extract / calculate model for X: 
 hal2maf $options_hal2maf_XY --refTargets $ancestral_repeat_final_AR100kb_hg38X $hal_file $maf_100kb_X
