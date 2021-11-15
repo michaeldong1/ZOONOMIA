@@ -2,8 +2,8 @@
 
 #SBATCH -A projectName
 #SBATCH -J RepeatModel_%j
-#SBATCH -o error_out/RepeatModel_%j.out
-#SBATCH -o error_out/RepeatModel_%j.err
+#SBATCH -o error_out/AncModGenerator/RepeatModel_%j.out
+#SBATCH -o error_out/AncModGenerator/RepeatModel_%j.err
 #SBATCH -p core
 #SBATCH -n 4
 #SBATCH -t 1-00:00:00
@@ -29,20 +29,20 @@ module load phast/v1.5
 ### PARAMETERS
 
 # Files
-hal_file="HAL/241-mammalian-2020v2.hal" # pathway to HAL file
-tree="input/TREE/Zoonomia_ChrX_lessGC40_241species_30Consensus.nh" # Newick format tree
+hal_file=$1 # pathway to HAL file
+tree=$2 # Newick format tree
 
 # species anc ancestors
-species_rmsk="fullTreeAnc238" # Ancestor to calculate repeats on. Can be different from most ancestral one.
-species_final="fullTreeAnc239" # most ancestal species. If identical to "species_rmsk", leave blank.
+species_rmsk=$3 # Ancestor to calculate repeats on. Can be different from most ancestral one.
+species_final=$4 # most ancestal species. If identical to "species_rmsk", leave blank.
 if [[ "$species_final" != "" ]]; then
 	species_final=$species_rmsk
 fi
 list_ancestor="fullTreeAnc5 fullTreeAnc13 fullTreeAnc115 fullTreeAnc237" # List of ancestors or species to check synteny against.
-species_reference="Homo_sapiens" # Species of reference for X and Y models.
+species_reference=$5 # Species of reference for X and Y models.
 
 # Output directory
-output_dir="files/output/model_"$species_final # Output directory (will be generated if it does not exist)
+output_dir=$6 # Output directory (will be generated if it does not exist)
 if [ ! -d "$output_dir" ]; then
  	mkdir -p "$output_dir" || exit
 fi

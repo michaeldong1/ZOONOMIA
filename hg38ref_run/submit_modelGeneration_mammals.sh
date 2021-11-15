@@ -43,7 +43,14 @@
 echo -n "Time started: "
 date
 
-sbatch run_scripts/run_modelGeneration_mammals.sh
+hal_file="HAL/241-mammalian-2020v2.hal" # pathway to HAL file
+tree="input/TREE/Zoonomia_ChrX_lessGC40_241species_30Consensus.nh" # Newick format tree
+species_rmsk="fullTreeAnc238" # Ancestor to calculate repeats on. Can be different from most ancestral one.
+species_final="fullTreeAnc239" # most ancestal species. If identical to "species_rmsk", leave blank.
+species_reference="Homo_sapiens"
+output_dir="files/output/model_"$species_final 
+
+sbatch run_scripts/run_modelGeneration_mammals.sh $hal_file $tree $species_rmsk $species_final $species_reference $output_dir
 
 echo -n "Time ended: "
 date
