@@ -18,11 +18,13 @@ Please check the parameters in the submits before running.
 
 ### hal2maf_241MAMMALS
 
-script : submit_hal2maf_241MAMMALS_V2.sh
+script : submit_hal2maf_241MAMMALS_V2.sh , version : v2.0
 
-version : v2.0
+Description : Convert the HAL unreferenced alignment to MAF-formatted species-referenced alignments, given a reference species and a BED file specifying which fractions to extract. This script was used to extract the human-referenced alignemnt for PhyloP and PhastCons conservation calculations. 
 
-Description : Convert a HAL alignment to MAF format. 
+Depending on the parameters, you can specify if you want the duplicates filetered out or not.
+
+Note: The MAF alignment file available at https://cglgenomics.ucsc.edu/data/cactus is the same alignment than to the one extracted via this pipeline. In our project we extracted each
 
 ### speciesLister
 
