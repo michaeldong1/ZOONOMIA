@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -A snic2021-5-28
+#SBATCH -A project
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -J branchh241_%a
@@ -26,7 +26,6 @@
 # - biopython v1.73 : https://biopython.org/wiki/Download
 # - Phast v1.5 : https://github.com/CshlSiepelLab/phast
 # - gzip 1.5 : https://www.gnu.org/software/gzip
-
 
 # Bash info:
 # GNU bash, version 4.2.46(2)-release (x86_64-redhat-linux-gnu)
