@@ -59,7 +59,6 @@ for multiple_alignment in AlignIO.parse(sys.argv[1], "maf"):
 	file1.write("%s\t" % species_nb);
 	
 	# Run tree doctor to get total branch length with given list of species, and write the branch length in the output file
-	#tree_file = "/proj/uppstore2017228/KLT.04.200M/200m_MD/data/new_250_MAMMALS_v2_20201120/TREE/Zoonomia_ChrX_lessGC40_241species_30Consensus.nh"
 	bashCmd = ["tree_doctor","-P",species_list,"-b",tree_file]
 	process = subprocess.Popen(bashCmd, stdout=subprocess.PIPE)
 	output, error = process.communicate()
