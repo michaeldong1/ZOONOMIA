@@ -1,2 +1,0 @@
-human_onlychr_v2_mdong_10Mb_241MAMMALS_MTDF/chr10.0.10000000.maf.zst
-human_onlychr_v2_mdong_10Mb_241MAMMALS_MTDF/chr10.10000000.10000000.maf.zst
