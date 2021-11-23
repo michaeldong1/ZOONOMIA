@@ -12,11 +12,9 @@ The programs used were already installed on the Uppmax system.
 
 For the list of programs to install or inputs to provide, check the submit scripts for the README.
 
-## hg38_run
+## UppmaxSlurm_version
 
-Includes the pipelines used for processing the data for the zoonomia paper on human.
-
-Please check the parameters in the submits before running. 
+Includes the pipelines used for processing the data for the zoonomia paper. Please check the parameters in the submits before running. 
 
 ### hal2maf_241MAMMALS
 
