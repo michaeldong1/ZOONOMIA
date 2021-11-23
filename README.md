@@ -2,9 +2,11 @@
 
 ## Introduction
 
-This repository regroups the pipelines used to generate the different datasets used for the analysis in the alignment. 
+This repository regroups the pipelines used to generate the different datasets used for the generation and analysis of the 241-mammal Zoonomia dataset, for the upcoming publications: 
+- "Evolutionary constraint and innovation across hundreds of placental mammals" UNDER REVIEW
+- and "Evolutionary constraint and innovation across hundreds of placental mammals" UNDER REVIEW
 
-They are currently only set to run on the Uppmax SLURM batch system.
+They are set to run on the Uppmax SLURM batch system.
 
 The programs used were already installed on the Uppmax system.
 
@@ -24,7 +26,7 @@ Description : Convert the HAL unreferenced alignment to MAF-formatted species-re
 
 Depending on the parameters, you can specify if you want the duplicates filetered out or not.
 
-Note: The MAF alignment file available at https://cglgenomics.ucsc.edu/data/cactus is the same alignment than to the one extracted via this pipeline. In our project we extracted each
+Note: The MAF alignment file available at https://cglgenomics.ucsc.edu/data/cactus is the same alignment than to the one extracted via this pipeline. In our project we segmented the MAF into 10Mb alignment fractions.
 
 ### speciesLister
 
