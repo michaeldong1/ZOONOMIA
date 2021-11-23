@@ -12,7 +12,9 @@ The programs used were already installed on the Uppmax system.
 
 For the list of programs to install or inputs to provide, check the submit scripts for the README.
 
-## UppmaxSlurm_version
+## UppmaxSlurm_version1.0
+
+Package: zoonomiaMD_UxS , version v1.0 (use this name and version if you want to quote all scripts.)
 
 Includes the pipelines used for processing the data for the zoonomia paper. Please check the parameters in the submits before running. 
 
