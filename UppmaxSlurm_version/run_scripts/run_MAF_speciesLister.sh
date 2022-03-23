@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH -A snic2021-5-28
+#SBATCH -A project
 #SBATCH -p core
-#SBATCH -n 4
+#SBATCH -n 2
 #SBATCH -J branch241_%a
-#SBATCH -e error_out/speciesLister/branch241_%j_%a.err
-#SBATCH -o error_out/speciesLister/branch241_%j_%a.out
+#SBATCH -e error_out/SpL_%j_%a.err
+#SBATCH -o error_out/SpL_%j_%a.out
 #SBATCH -t 12:00:00
 
 echo -n "Time started: "
@@ -17,8 +17,7 @@ module load bioinfo-tools
 module load biopython/1.73
 module load phast
 
-# Script for converting hal to maf.
-# Will modify it to generate chunks of 1Mb
+# Script for listing species for each alignment block in a MAF.
 
 TmpID=${SLURM_JOB_ID:-$$}
 datetime=$(date +%d_%b_%H_%M) 
