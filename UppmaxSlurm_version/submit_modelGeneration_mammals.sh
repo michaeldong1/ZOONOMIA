@@ -12,7 +12,8 @@
 
 ### Description
 # A pipeine developped specifically to build a substitution model based on repeats calculated on the most ancestral sequence of the 241 Mammals Alignment.
-# Following recoomentations, we calculated repeats on the 2nd most ancestral sequence before reconverting coordinates to most ancestral consensus.
+# Following recommendations , we identified repeat regions on the 2nd most ancestral sequence before reconverting coordinates to the most ancestral consensus sequence.
+# Model was then estimated based on a randomly selected set of 100k positions. 
 # Designed to run on the Uppmax	SLURM system. Can be simply ed
 # Script customized to run everything in one run.
 # if not avaliable as module on your system, the following packages/ apps are required to be installed :
