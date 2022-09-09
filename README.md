@@ -4,11 +4,9 @@
 
 This repository regroups the pipelines used to generate the different datasets used for the generation and analysis of the 241-mammal Zoonomia dataset, for the upcoming publications: 
 - "Evolutionary constraint and innovation across hundreds of placental mammals" UNDER REVIEW
-- and "Evolutionary constraint and innovation across hundreds of placental mammals" UNDER REVIEW
+- and "Leveraging Base Pair Mammalian Constraint to Understand Genetic Variation and Human Disease" UNDER REVIEW
 
-They are set to run on the Uppmax SLURM batch system.
-
-The programs used were already installed on the Uppmax system.
+They are set to run on the Uppmax SLURM batch system. All dependencies used were already installed on the Uppmax system.
 
 For the list of programs to install or inputs to provide, check the submit scripts for the README.
 
