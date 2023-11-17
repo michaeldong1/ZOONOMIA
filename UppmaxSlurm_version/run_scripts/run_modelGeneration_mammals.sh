@@ -109,7 +109,7 @@ bedops --chop 1 $ancestral_repeat_final_synt | shuf -n 100000 | sort -k1,1 -k2,2
 
 # run hal2maf
 hal2maf $options_hal2maf --refTargets $ancestral_repeat_final_AR100kb $halfile $maf_100kb
-/proj/uppstore2017228/KLT.04.200M/200m_MD/resources/mafTools/bin/mafDuplicateFilter -m $maf_100kb > $maf_100kb"_temp" && mv $maf_100kb"_temp" $maf_100kb
+mafTools/bin/mafDuplicateFilter -m $maf_100kb > $maf_100kb"_temp" && mv $maf_100kb"_temp" $maf_100kb
 
 #phyloFit
 phyloFit $maf_100kb -i MAF --subst-mod REV --EM --tree $tree --out-root $maf_100kbmod
